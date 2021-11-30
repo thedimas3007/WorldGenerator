@@ -22,13 +22,19 @@ namespace PerlinTest
         static float[,] temperature;
         static float[,] rivers;
         
-        enum biomeList {DESERT, PLAINS, TUNDRA, SAVANNAH, SHRUBLAND, TAIGA, SEASONAL_FOREST, FOREST, JUNGLE, SWAMP, ICE, UNKNOWN};
+        enum biomeList {DESERT, PLAINS, TUNDRA, SAVANNA, SHRUBLAND, TAIGA, SEASONAL_FOREST, FOREST, JUNGLE, SWAMP, ICE, UNKNOWN};
         static Pen[] biomeColors = {Pens.NavajoWhite, Pens.Green, Pens.MediumAquamarine, Pens.Olive, Pens.DarkGoldenrod, Pens.MediumSeaGreen, Pens.Green, Pens.ForestGreen, Pens.LimeGreen, Pens.OliveDrab, Pens.Snow, Pens.Black};
+        static Pen[] waterColors = {PFH("#32A598"), PFH("#44AFF5"), PFH("#14559B"), PFH("#2C8B9C"), PFH("#44AFF5"), PFH("#007BF7"), PFH("#20A3CC"), PFH("#1E97F2"), PFH("#14A2C5"), PFH("#617B64"), PFH("#2570B5")};
 
         static int CalcTemp(int x, int y, int height)
         {
+            new Pen(ColorTranslator.FromHtml("#FF0000"));
             float noiseTemp = temperature[x, y] * 3.5f;
             return Convert.ToInt32((1 - Math.Abs(height/2.0 - y) / (height / 2.0)) * 100.0 * noiseTemp / 256);
+        }
+
+        static Pen PFH(string color) { // PenFromHtml
+            return new Pen(ColorTranslator.FromHtml(color));
         }
 
         static int CalcHumidity(int x, int y)
@@ -50,7 +56,7 @@ namespace PerlinTest
 
             else if (temp > 25 && temp <= 50 && humidity <= 100) { return biomeList.TAIGA; }
             else if (temp <= 75 && humidity <= 50) { return biomeList.SHRUBLAND; }
-            else if (temp <= 100 && humidity <= 50) { return biomeList.SAVANNAH; }
+            else if (temp <= 100 && humidity <= 50) { return biomeList.SAVANNA; }
 
             else if (temp > 50 && temp <= 75 && humidity <= 75) { return biomeList.FOREST; }
             else if (temp <= 100 && humidity <= 75) { return biomeList.SEASONAL_FOREST; }
@@ -60,6 +66,12 @@ namespace PerlinTest
 
             else { Console.WriteLine($"ERROR | Temp: {temp} | Humidity: {humidity}"); return biomeList.UNKNOWN; }
         }
+
+        static Pen GetWaterPen(biomeList biome)
+        {
+            return waterColors[(int)biome];
+        }
+
         static Pen GetBiomePen(biomeList biome)
         {
             return biomeColors[(int)biome];
@@ -70,11 +82,13 @@ namespace PerlinTest
             bool isRiver = rivers[x, y] >= 130 && rivers[x, y] <= 140;
             if (level < SEA_LEVEL/2)
             {
-                return Pens.DarkBlue;
+                biomeList biome = GetBiome(x, y);
+                if (biome == biomeList.ICE || biome == biomeList.TUNDRA) { return PFH("#2080C9"); }
+                else { return PFH("#1787D4"); }
             }
             else if (level >= SEA_LEVEL/2 && level < SEA_LEVEL || isRiver)
             {
-                return Pens.Blue;
+                return GetWaterPen(GetBiome(x, y));
             }
             else if (level >= SEA_LEVEL && level < SEA_LEVEL+15)
             {
