@@ -67,7 +67,7 @@ namespace PerlinTest
 
         static Pen GetPen(int x, int y, int level)
         {
-            bool isRiver = rivers[x, y] >= 125 && rivers[x, y] <= 135;
+            bool isRiver = rivers[x, y] >= 130 && rivers[x, y] <= 140;
             if (level < SEA_LEVEL/2)
             {
                 return Pens.DarkBlue;
@@ -108,7 +108,7 @@ namespace PerlinTest
             noise = Noise.Calc2D(width, height, 0.05f);
             humidity = Noise.Calc2D(width, height, 0.005f);
             temperature = Noise.Calc2D(width, height, 0.015f);
-            rivers = Noise.Calc2D(width, height, 0.025f);
+            rivers = Noise.Calc2D(width, height, 0.011f);
 
             Bitmap bitmap = new Bitmap(width, height);
             Graphics graphics = Graphics.FromImage(bitmap);
