@@ -20,6 +20,7 @@ namespace PerlinTest
         static float[,] noise;
         static float[,] humidity;
         static float[,] temperature;
+        static float[,] rivers;
         
         enum biomeList {DESERT, PLAINS, TUNDRA, SAVANNAH, SHRUBLAND, TAIGA, SEASONAL_FOREST, FOREST, JUNGLE, SWAMP, ICE, UNKNOWN};
         static Pen[] biomeColors = {Pens.NavajoWhite, Pens.Green, Pens.MediumAquamarine, Pens.Olive, Pens.DarkGoldenrod, Pens.MediumSeaGreen, Pens.Green, Pens.ForestGreen, Pens.LimeGreen, Pens.OliveDrab, Pens.Snow, Pens.Black};
@@ -66,12 +67,12 @@ namespace PerlinTest
 
         static Pen GetPen(int x, int y, int level)
         {
-            
+            bool isRiver = rivers[x, y] >= 125 && rivers[x, y] <= 135;
             if (level < SEA_LEVEL/2)
             {
                 return Pens.DarkBlue;
             }
-            else if (level >= SEA_LEVEL/2 && level < SEA_LEVEL)
+            else if (level >= SEA_LEVEL/2 && level < SEA_LEVEL || isRiver)
             {
                 return Pens.Blue;
             }
@@ -107,10 +108,10 @@ namespace PerlinTest
             noise = Noise.Calc2D(width, height, 0.05f);
             humidity = Noise.Calc2D(width, height, 0.005f);
             temperature = Noise.Calc2D(width, height, 0.015f);
+            rivers = Noise.Calc2D(width, height, 0.025f);
 
             Bitmap bitmap = new Bitmap(width, height);
             Graphics graphics = Graphics.FromImage(bitmap);
-            MemoryStream ms = new MemoryStream();
 
             for (int x = 0; x < width; x++)
             {
@@ -118,7 +119,6 @@ namespace PerlinTest
                 {
                     //int perlin = Perlin.OctavePerlin
                     graphics.DrawRectangle(GetPen(x, y, (int)noise[x, y]), x, y, 1, 1);
-
                 }
             }
 
