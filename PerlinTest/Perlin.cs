@@ -5,11 +5,10 @@ using System.Numerics;
 using System.Text;
 //using Microsoft.Xna.Framework;
 
-namespace NoiseTest
-
+namespace PerlinTest
 {
 
-    class Noise
+    class Perlin
     {
         double persistence;
         double frequency;
@@ -17,7 +16,7 @@ namespace NoiseTest
         int octaves;
         int randomSeed;
 
-        public Noise(double persistence, double frequency, double amplitude, int octaves, int randomSeed)
+        public Perlin(double persistence, double frequency, double amplitude, int octaves, int randomSeed)
         {
             this.persistence = persistence;
             this.frequency = frequency;
