@@ -42,7 +42,7 @@ namespace PerlinTest
 
         static int CalcTemp(int x, int y, int height)
         {
-            float noiseTemp = Get2D(x, y, temperature) / 255f * 100 * 4;
+            float noiseTemp = Get2D(x, y, temperature) / 255f * 100 * 8;
             return Convert.ToInt32((1 - Math.Abs(height / 2.0 - y) / (height / 2.0)) * 100.0 * noiseTemp / 256);
         }
 
@@ -97,13 +97,15 @@ namespace PerlinTest
             bool isRiver = Get2D(x, y, rivers) >= 125 && Get2D(x, y, rivers) <= 145;
             if (level < SEA_LEVEL/2)
             {
-                biomeList biome = GetBiome(x, y);
+                /*biomeList biome = GetBiome(x, y);
                 if (biome == biomeList.ICE || biome == biomeList.TUNDRA) { return PFH("#2080C9"); }
-                else { return PFH("#1787D4"); }
+                else { return PFH("#1787D4"); }*/
+                return PFH("#3D57D6");
             }
             else if (level >= SEA_LEVEL/2 && level < SEA_LEVEL || isRiver)
             {
-                return GetWaterPen(GetBiome(x, y));
+                //return GetWaterPen(GetBiome(x, y));
+                return PFH("#3F76E4");
             }
             else if (level >= SEA_LEVEL && level < SEA_LEVEL+15)
             {
